@@ -42,3 +42,7 @@ next-env.d.ts
 /.vscode
 .vscode
 .vscode/*
+/src/generated
+/src/generated/prisma/*
+./src/generated/*
+./src/generated

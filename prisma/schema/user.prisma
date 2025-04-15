@@ -1,0 +1,8 @@
+model User{
+    id String @id @default(autoincreament()) 
+    email String @unique
+    hasedPassword String @map("hashed_password")
+    session Session[]
+    createdAt DateTime @default(now()) @map("created_at")
+    updatedAt DateTime @updatedAt @map("updated_at")
+}

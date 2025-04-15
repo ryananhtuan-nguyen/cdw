@@ -7,6 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
+    
   },
   "dependencies": {
     "@prisma/client": "^6.6.0",
@@ -19,6 +20,7 @@
     "react-dom": "^19.0.0",
     "tailwind-merge": "^3.2.0",
     "tw-animate-css": "^1.2.5"
+    
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
@@ -30,5 +32,9 @@
     "eslint-config-next": "15.3.0",
     "tailwindcss": "^4",
     "typescript": "^5"
+  },
+  "prisma": {
+    "schema": "./prisma/schema"
   }
+
 }

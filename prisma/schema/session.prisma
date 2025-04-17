@@ -1,10 +1,10 @@
 model Session {
-    id Int @id @default(autoincrement())
-    sessionToken String @unique @map("session_token")
-    expires DateTime
-    requires2FA Boolean @default(true)
-    userId String @map("user_id")
-    user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id           Int      @id @default(autoincrement())
+  sessionToken String   @unique @map("session_token")
+  expires      DateTime
+  requires2FA  Boolean  @default(true)
+  userId       Int      @map("user_id")
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-    @@map("sessions")
+  @@map("sessions")
 }

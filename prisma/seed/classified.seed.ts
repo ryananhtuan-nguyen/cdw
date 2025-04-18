@@ -33,10 +33,12 @@ export async function seedClassified(prisma: PrismaClient) {
       ? faker.helpers.arrayElement(model.modelVariants)
       : null
 
-    const year = faker.date.between({
-      from: new Date(1925, 0, 1),
-      to: new Date().getFullYear(),
-    })
+    const year = faker.date
+      .between({
+        from: new Date(1925, 0, 1),
+        to: new Date(),
+      })
+      .getFullYear()
 
     const title = [year, make.name, model.name, variant?.name]
       .filter(Boolean)
@@ -47,7 +49,7 @@ export async function seedClassified(prisma: PrismaClient) {
     const baseSlug = slugify(`${title}-${vrm}`)
 
     classifiedData.push({
-      year: Number(year),
+      year,
       vrm,
       slug: baseSlug,
       makeId: make.id,

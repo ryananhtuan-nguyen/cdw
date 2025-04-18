@@ -2,7 +2,7 @@ model Make {
   id         Int          @id @default(autoincrement())
   name       String       @unique
   image      String
-  model      Model[]
+  models     Model[]
   classified Classified[]
   createdAt  DateTime     @default(now()) @map("created_at")
   updatedAt  DateTime     @updatedAt @map("updated_at")
@@ -11,16 +11,16 @@ model Make {
 }
 
 model Model {
-  id           Int            @id @default(autoincrement())
-  name         String
-  makeId       Int            @map("make_id")
-  make         Make           @relation(fields: [makeId], references: [id], onDelete: Cascade)
-  modelVariant ModelVariant[]
-  classified   Classified[]
-  createdAt    DateTime       @default(now()) @map("created_at")
-  updatedAt    DateTime       @updatedAt @map("updated_at")
+  id            Int            @id @default(autoincrement())
+  name          String
+  makeId        Int            @map("make_id")
+  make          Make           @relation(fields: [makeId], references: [id], onDelete: Cascade)
+  modelVariants ModelVariant[]
+  classified    Classified[]
+  createdAt     DateTime       @default(now()) @map("created_at")
+  updatedAt     DateTime       @updatedAt @map("updated_at")
 
-  @@unique([name, makeId])
+  @@unique([name, makeId], name: "makeId_name")
   @@map("models")
 }
 
@@ -35,6 +35,6 @@ model ModelVariant {
   createdAt  DateTime     @default(now()) @map("created_at")
   updatedAt  DateTime     @updatedAt @map("updated_at")
 
-  @@unique([name, modelId])
+  @@unique([name, modelId], name: "modelId_name")
   @@map("model_variants")
 }

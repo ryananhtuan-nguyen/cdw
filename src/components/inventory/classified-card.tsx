@@ -2,9 +2,10 @@ import Link from 'next/link'
 import React from 'react'
 import { routes } from '@/config/routes'
 import Image from 'next/image'
-import type { CarWithImages } from '@/config/type'
+import { MultiStepFormEnum, type CarWithImages } from '@/config/type'
 import { HTMLParser } from '../shared/html-parser'
 import { getKeyClassifiedInfo } from '@/lib/utils'
+import { Button } from '../ui/button'
 
 type Props = {
   car: CarWithImages
@@ -58,6 +59,25 @@ const ClassifiedCard = ({ car }: Props) => {
                 </li>
               ))}
           </ul>
+        </div>
+        <div className="mt-4 flex flex-col lg:flex-row space-y-2 lg:space-y-0 lg:gap-x-2 w-full">
+          <Button
+            className="flex-1 transition-colors hover:border-white hover:bg-primary hover:text-white py-2 lg:py-2.5 h-full text-xs md:text-sm xl:text-base"
+            asChild
+            variant={'outline'}
+            size={'sm'}
+          >
+            <Link href={routes.reserve(car.slug, MultiStepFormEnum.WELCOME)}>
+              Reserve
+            </Link>
+          </Button>
+          <Button
+            className="flex-1 py-2 lg:py-2.5 h-full text-xs md:text-sm xl:text-base"
+            asChild
+            size={'sm'}
+          >
+            <Link href={routes.singleClassified(car.slug)}>View Details</Link>
+          </Button>
         </div>
       </div>
     </div>

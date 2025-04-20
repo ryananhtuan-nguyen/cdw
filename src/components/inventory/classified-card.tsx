@@ -6,6 +6,7 @@ import { MultiStepFormEnum, type CarWithImages } from '@/config/type'
 import { HTMLParser } from '../shared/html-parser'
 import { getKeyClassifiedInfo } from '@/lib/utils'
 import { Button } from '../ui/button'
+import FavouriteButton from './favourite-button'
 
 type Props = {
   car: CarWithImages
@@ -26,6 +27,9 @@ const ClassifiedCard = ({ car }: Props) => {
             quality={25}
           />
         </Link>
+
+        <FavouriteButton />
+
         <div className="absolute top-2.5 right-3.5 bg-primary text-slate-50 font-bold px-2 py-1 rounded">
           <p className="text-xs lg:text-base xl:text-lg font-semibold">
             {car.price}

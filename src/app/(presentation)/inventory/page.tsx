@@ -1,7 +1,6 @@
-import ClassifiedCard from '@/components/inventory/classified-card'
+import ClassifiedList from '@/components/inventory/classified-list'
 import type { AwaitedPageProps, PageProps } from '@/config/type'
 import { db } from '@/lib/db'
-import ClassifiedList from './classified-list'
 
 const getInventory = async (seachParams: AwaitedPageProps['searchParams']) => {
   return db.classified.findMany({

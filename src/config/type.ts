@@ -1,4 +1,4 @@
-import type { Prisma } from "@prisma/client"
+import type { Prisma } from '@prisma/client'
 
 type Params = {
   [key: string]: string | string[]
@@ -13,5 +13,12 @@ export type AwaitedPageProps = {
   searchParams?: Awaited<PageProps['searchParams']>
 }
 
+export enum MultiStepFormEnum {
+  WELCOME = 1,
+  SELECT_DATE = 2,
+  SUBMIT_DETAILS = 3,
+}
 
-export type CarWithImages = Prisma.ClassifiedGetPayload<{ include: { images: true } }>
+export type CarWithImages = Prisma.ClassifiedGetPayload<{
+  include: { images: true }
+}>

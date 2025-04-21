@@ -22,3 +22,7 @@ export enum MultiStepFormEnum {
 export type CarWithImages = Prisma.ClassifiedGetPayload<{
   include: { images: true }
 }>
+
+export interface Favourites {
+  ids: number[]
+}

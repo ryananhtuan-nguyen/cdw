@@ -13,8 +13,6 @@ export const POST = async (request: NextRequest) => {
   console.log('ROUTE HIT')
   const body = await request.json()
 
-  console.log('🚀 ~ file: route.ts:22 ~ POST ~ body:', body)
-
   const { data, error } = validateIdSchema.safeParse(body)
 
   if (!data) {
@@ -46,5 +44,5 @@ export const POST = async (request: NextRequest) => {
 
   revalidatePath(routes.favourites)
 
-  return NextResponse.json({ id: favourites.ids }, { status: 200 })
+  return NextResponse.json({ ids: favourites.ids }, { status: 200 })
 }

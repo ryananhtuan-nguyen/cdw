@@ -1,4 +1,5 @@
 import ClassifiedList from '@/components/inventory/classified-list'
+import Sidebar from '@/components/inventory/sidebar'
 import CustomPagination from '@/components/shared/custom-pagination'
 import { CARS_PER_PAGE } from '@/config/constants'
 import { routes } from '@/config/routes'
@@ -47,7 +48,7 @@ export default async function InventoryPage(props: PageProps) {
 
   return (
     <div className="flex">
-      {/* <Sidebar /> */}
+      <Sidebar minMaxValues={null} searchParams={searchParams} />
 
       <div className="flex-1 p-4 bg-white">
         <div className="flex space-y-2 flex-col items-center justify-center pb-4 -mt-1">

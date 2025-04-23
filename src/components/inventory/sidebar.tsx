@@ -7,6 +7,8 @@ import type { AwaitedPageProps } from '@/config/type'
 import { routes } from '@/config/routes'
 import { env } from '@/env'
 import { cn } from '@/lib/utils'
+import SearchInput from '../shared/search-input'
+import TaxonomyFilters from '@/app/(presentation)/inventory/taxonomy-filters'
 interface Props extends AwaitedPageProps {
   minMaxValues: any
 }
@@ -56,21 +58,33 @@ const Sidebar = ({ minMaxValues, searchParams }: Props) => {
   }
   return (
     <div className="py-4 w-[21.25rem] bg-white border-r border-muted block">
-      <div className="text-lg font-semibold flex justify-between px-4">
-        <span>Filters</span>
-        <button
-          type="button"
-          onClick={clearFilters}
-          aria-disabled={!filterCount}
-          className={cn(
-            'text-sm text-gray-500 py-1',
-            !filterCount
-              ? 'disabled opacity-50 pointer-events-none cursor-default'
-              : 'hover:underline cursor-pointer'
-          )}
-        >
-          Clear all {filterCount ? `(${filterCount})` : null}
-        </button>
+      <div>
+        <div className="text-lg font-semibold flex justify-between px-4">
+          <span>Filters</span>
+          <button
+            type="button"
+            onClick={clearFilters}
+            aria-disabled={!filterCount}
+            className={cn(
+              'text-sm text-gray-500 py-1',
+              !filterCount
+                ? 'disabled opacity-50 pointer-events-none cursor-default'
+                : 'hover:underline cursor-pointer'
+            )}
+          >
+            Clear all {filterCount ? `(${filterCount})` : null}
+          </button>
+        </div>
+        <div className="mt-2" />
+      </div>
+      <div className="p-4">
+        <SearchInput
+          placeholder="Search cars..."
+          className="w-full px-3 py-2 border rounded-md focus:outline-hidden focus:ring-2 focus:ring-blue-500"
+        />
+      </div>
+      <div className="p-4 space-y-2">
+        <TaxonomyFilters />
       </div>
     </div>
   )

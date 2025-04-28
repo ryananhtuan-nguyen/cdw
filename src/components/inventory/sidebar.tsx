@@ -56,6 +56,26 @@ const Sidebar = ({ minMaxValues, searchParams }: Props) => {
     window.location.replace(url.toString())
     setFilterCount(0)
   }
+
+  const handleChange = async (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
+    const { name, value } = e.target
+
+    setQueryStates({
+      [name]: value || null,
+    })
+
+    if (name === 'make') {
+      setQueryStates({
+        model: null,
+        modelVariant: null,
+      })
+    }
+
+    router.refresh()
+  }
+
   return (
     <div className="py-4 w-[21.25rem] bg-white border-r border-muted block">
       <div>
@@ -84,7 +104,10 @@ const Sidebar = ({ minMaxValues, searchParams }: Props) => {
         />
       </div>
       <div className="p-4 space-y-2">
-        <TaxonomyFilters />
+        <TaxonomyFilters
+          searchParams={searchParams}
+          handleChange={handleChange}
+        />
       </div>
     </div>
   )

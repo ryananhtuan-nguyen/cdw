@@ -1,7 +1,6 @@
 import type { Prisma, PrismaClient } from '@prisma/client'
 import { parse } from 'csv'
 import fs from 'node:fs'
-import { connect } from 'node:http2'
 
 type MakeModelMap = {
   [make: string]: {
@@ -135,10 +134,10 @@ export async function seedTaxonomy(prisma: PrismaClient) {
     }
   }
 
-  await insertInBatches(modelPromises, BATCH_SIZE, async (batch) => {
-    const models = await Promise.all(batch)
-    console.log(`🌱 Seeded db with ${models.length} models`)
-  })
+  //   await insertInBatches(modelPromises, BATCH_SIZE, async (batch) => {
+  //     const models = await Promise.all(batch)
+  //     console.log(`🌱 Seeded db with ${models.length} models`)
+  //   })
 
   const variantPromises: Prisma.Prisma__ModelVariantClient<unknown, unknown>[] =
     []

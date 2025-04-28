@@ -1,40 +1,40 @@
 model Make {
-  id         Int          @id @default(autoincrement())
-  name       String       @unique
-  image      String
-  models     Model[]
-  classified Classified[]
-  createdAt  DateTime     @default(now()) @map("created_at")
-  updatedAt  DateTime     @updatedAt @map("updated_at")
+    id         String       @id @default(uuid())
+    name       String       @unique
+    image      String
+    models     Model[]
+    classified Classified[]
+    createdAt  DateTime     @default(now()) @map("created_at")
+    updatedAt  DateTime     @updatedAt @map("updated_at")
 
-  @@map("makes")
+    @@map("makes")
 }
 
 model Model {
-  id            Int            @id @default(autoincrement())
-  name          String
-  makeId        Int            @map("make_id")
-  make          Make           @relation(fields: [makeId], references: [id], onDelete: Cascade)
-  modelVariants ModelVariant[]
-  classified    Classified[]
-  createdAt     DateTime       @default(now()) @map("created_at")
-  updatedAt     DateTime       @updatedAt @map("updated_at")
+    id            String         @id @default(uuid())
+    name          String
+    makeId        String         @map("make_id")
+    make          Make           @relation(fields: [makeId], references: [id], onDelete: Cascade)
+    modelVariants ModelVariant[]
+    classified    Classified[]
+    createdAt     DateTime       @default(now()) @map("created_at")
+    updatedAt     DateTime       @updatedAt @map("updated_at")
 
-  @@unique([name, makeId], name: "makeId_name")
-  @@map("models")
+    @@unique([name, makeId], name: "makeId_name")
+    @@map("models")
 }
 
 model ModelVariant {
-  id         Int          @id @default(autoincrement())
-  name       String
-  modelId    Int          @map("model_id")
-  yearStart  Int          @map("year_start")
-  yearEnd    Int          @map("year_end")
-  model      Model        @relation(fields: [modelId], references: [id], onDelete: Cascade)
-  classified Classified[]
-  createdAt  DateTime     @default(now()) @map("created_at")
-  updatedAt  DateTime     @updatedAt @map("updated_at")
+    id         String       @id @default(uuid())
+    name       String
+    modelId    String       @map("model_id")
+    yearStart  Int          @map("year_start")
+    yearEnd    Int          @map("year_end")
+    model      Model        @relation(fields: [modelId], references: [id], onDelete: Cascade)
+    classified Classified[]
+    createdAt  DateTime     @default(now()) @map("created_at")
+    updatedAt  DateTime     @updatedAt @map("updated_at")
 
-  @@unique([name, modelId], name: "modelId_name")
-  @@map("model_variants")
+    @@unique([name, modelId], name: "modelId_name")
+    @@map("model_variants")
 }

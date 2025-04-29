@@ -7,20 +7,16 @@ import { NextResponse, type NextRequest } from 'next/server'
 import z from 'zod'
 
 const validateIdSchema = z.object({
-  id: z.number().int(),
+  id: z.string().uuid(),
 })
 export const POST = async (request: NextRequest) => {
   console.log('ROUTE HIT')
   const body = await request.json()
 
   const { data, error } = validateIdSchema.safeParse(body)
-
+  console.log({ data, error })
   if (!data) {
     return NextResponse.json({ error: error?.message }, { status: 400 })
-  }
-
-  if (typeof data.id !== 'number') {
-    return NextResponse.json({ error: 'Invalid ID' }, { status: 400 })
   }
 
   //get SourceId from cookies

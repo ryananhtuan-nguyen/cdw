@@ -24,5 +24,14 @@ export type CarWithImages = Prisma.ClassifiedGetPayload<{
 }>
 
 export interface Favourites {
-  ids: number[]
+  ids: string[]
 }
+
+export interface TaxonomyFilterProps extends AwaitedPageProps {
+  handleChange: (e: React.ChangeEvent<HTMLSelectElement>) => void
+}
+
+export type FilterOptions<LType, VType> = Array<{
+  label: LType
+  value: VType
+}>

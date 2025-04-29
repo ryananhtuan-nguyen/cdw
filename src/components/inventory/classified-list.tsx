@@ -5,7 +5,7 @@ import ClassifiedCard from '@/components/inventory/classified-card'
 
 type Props = {
   cars: CarWithImages[]
-  favourites: number[]
+  favourites: string[]
 }
 
 const ClassifiedList = ({ cars, favourites }: Props) => {

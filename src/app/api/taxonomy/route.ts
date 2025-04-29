@@ -16,7 +16,7 @@ export const GET = async (req: NextRequest) => {
     if (params.get('make')) {
       models = await db.model.findMany({
         where: {
-          make: { id: Number(params.get('make')) },
+          make: { id: params.get('make') as string },
         },
       })
     }
@@ -26,7 +26,7 @@ export const GET = async (req: NextRequest) => {
     if (params.get('make') && params.get('model')) {
       modelVariants = await db.modelVariant.findMany({
         where: {
-          model: { id: Number(params.get('model')) },
+          model: { id: params.get('model') as string },
         },
       })
     }

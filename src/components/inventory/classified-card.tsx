@@ -17,7 +17,7 @@ import { AnimatePresence, motion } from 'framer-motion'
 
 type Props = {
   car: CarWithImages
-  favourites: number[]
+  favourites: string[]
 }
 
 const ClassifiedCard = ({ car, favourites }: Props) => {

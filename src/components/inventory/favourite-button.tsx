@@ -9,14 +9,14 @@ import { endpoints } from '@/config/endpoints'
 type Props = {
   isFavourite: boolean
   setIsFavourite: (isFavourite: boolean) => void
-  id: number
+  id: string
 }
 
 const FavouriteButton = ({ isFavourite, setIsFavourite, id }: Props) => {
   const router = useRouter()
 
   const handleFavourite = async () => {
-    const { ids } = await api.post<{ ids: number[] }>(endpoints.favourites, {
+    const { ids } = await api.post<{ ids: string[] }>(endpoints.favourites, {
       json: {
         id,
       },

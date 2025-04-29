@@ -9,6 +9,7 @@ import { env } from '@/env'
 import { cn } from '@/lib/utils'
 import SearchInput from '../shared/search-input'
 import TaxonomyFilters from '@/app/(presentation)/inventory/taxonomy-filters'
+import RangeFilters from './range-filters'
 interface Props extends AwaitedPageProps {
   minMaxValues: any
 }
@@ -108,6 +109,8 @@ const Sidebar = ({ minMaxValues, searchParams }: Props) => {
           searchParams={searchParams}
           handleChange={handleChange}
         />
+
+        <RangeFilters />
       </div>
     </div>
   )

@@ -41,7 +41,7 @@ const CarFilterSchema = z.object({
   ulezCompliance: z.string().optional(),
 })
 
-export const buildCarFilterQuery = (
+const buildCarFilterQuery = (
   searchParams: AwaitedPageProps['searchParams'] | undefined
 ): Prisma.ClassifiedWhereInput => {
   const { data } = CarFilterSchema.safeParse(searchParams)

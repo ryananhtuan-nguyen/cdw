@@ -1,4 +1,4 @@
-import 'server-only'
+'use server'
 import { cookies } from 'next/headers'
 import { v4 as uuid } from 'uuid'
 

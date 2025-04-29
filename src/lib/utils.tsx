@@ -1,8 +1,15 @@
 import { clsx, type ClassValue } from 'clsx'
 import { twMerge } from 'tailwind-merge'
 import { Cog, Fuel, GaugeCircle, Paintbrush } from 'lucide-react'
-import type { CarWithImages } from '@/config/type'
-import { OdoUnit, Transmission, FuelType } from '@prisma/client'
+import type { AwaitedPageProps, CarWithImages } from '@/config/type'
+import {
+  OdoUnit,
+  Transmission,
+  FuelType,
+  type Prisma,
+  ClassifiedStatus,
+} from '@prisma/client'
+import { CarFilterSchema } from '@/app/(presentation)/inventory/page'
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -68,4 +75,76 @@ export const getKeyClassifiedInfo = (car: CarWithImages) => {
       value: formatColour(car?.colour),
     },
   ]
+}
+
+export const buildCarFilterQuery = (
+  searchParams: AwaitedPageProps['searchParams'] | undefined
+): Prisma.ClassifiedWhereInput => {
+  const { data } = CarFilterSchema.safeParse(searchParams)
+
+  if (!data) return { status: ClassifiedStatus.LIVE }
+
+  const keys = Object.keys(data)
+
+  const taxonomyFilters = ['make', 'model', 'modelVariant']
+
+  const rangeFilters = {
+    minYear: 'year',
+    maxYear: 'year',
+    minPrice: 'price',
+    maxPrice: 'price',
+    minReading: 'odoReading',
+    maxReading: 'odoReading',
+  }
+
+  //   const numFilters = ['seats', 'doors']
+  //   const enumFilters = [
+  //     'odoUnit',
+  //     'currency',
+  //     'transmission',
+  //     'bodyType',
+  //     'fuelType',
+  //     'colour',
+  //     'ulezCompliance',
+  //   ]
+
+  const mapParamsToFields = keys.reduce((acc, key) => {
+    const value = searchParams?.[key] as string | undefined
+    if (!value) return acc
+    if (taxonomyFilters.includes(key)) {
+      acc[key] = { id: value }
+    } else if (key in rangeFilters) {
+      const field = rangeFilters[key as keyof typeof rangeFilters]
+      acc[field] = acc[field] || {}
+      if (key.startsWith('min')) {
+        acc[field].gte = Number(value)
+      } else if (key.startsWith('max')) {
+        acc[field].lte = Number(value)
+      }
+    }
+
+    return acc
+  }, {} as { [key: string]: any })
+
+  return {
+    status: ClassifiedStatus.LIVE,
+    ...(searchParams?.q && {
+      OR: [
+        {
+          title: {
+            contains: searchParams.q as string,
+            mode: 'insensitive',
+          },
+        },
+
+        {
+          description: {
+            contains: searchParams.q as string,
+            mode: 'insensitive',
+          },
+        },
+      ],
+    }),
+    ...mapParamsToFields,
+  }
 }

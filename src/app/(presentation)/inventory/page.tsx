@@ -13,13 +13,14 @@ import { db } from '@/lib/db'
 import { redis } from '@/lib/redis-store'
 import { getSourceId } from '@/lib/source-id'
 import { ClassifiedStatus, type Prisma } from '@prisma/client'
+import { buildCarFilterQuery } from '@/lib/utils'
 
-const PageSchema = z
+export const PageSchema = z
   .string()
   .transform((val) => Math.max(Number(val), 1))
   .optional()
 
-const CarFilterSchema = z.object({
+export const CarFilterSchema = z.object({
   query: z.string().optional(),
   make: z.string().optional(),
   model: z.string().optional(),
@@ -40,78 +41,6 @@ const CarFilterSchema = z.object({
   seats: z.string().optional(),
   ulezCompliance: z.string().optional(),
 })
-
-const buildCarFilterQuery = (
-  searchParams: AwaitedPageProps['searchParams'] | undefined
-): Prisma.ClassifiedWhereInput => {
-  const { data } = CarFilterSchema.safeParse(searchParams)
-
-  if (!data) return { status: ClassifiedStatus.LIVE }
-
-  const keys = Object.keys(data)
-
-  const taxonomyFilters = ['make', 'model', 'modelVariant']
-
-  const rangeFilters = {
-    minYear: 'year',
-    maxYear: 'year',
-    minPrice: 'price',
-    maxPrice: 'price',
-    minReading: 'odoReading',
-    maxReading: 'odoReading',
-  }
-
-  //   const numFilters = ['seats', 'doors']
-  //   const enumFilters = [
-  //     'odoUnit',
-  //     'currency',
-  //     'transmission',
-  //     'bodyType',
-  //     'fuelType',
-  //     'colour',
-  //     'ulezCompliance',
-  //   ]
-
-  const mapParamsToFields = keys.reduce((acc, key) => {
-    const value = searchParams?.[key] as string | undefined
-    if (!value) return acc
-    if (taxonomyFilters.includes(key)) {
-      acc[key] = { id: value }
-    } else if (key in rangeFilters) {
-      const field = rangeFilters[key as keyof typeof rangeFilters]
-      acc[field] = acc[field] || {}
-      if (key.startsWith('min')) {
-        acc[field].gte = Number(value)
-      } else if (key.startsWith('max')) {
-        acc[field].lte = Number(value)
-      }
-    }
-
-    return acc
-  }, {} as { [key: string]: any })
-
-  return {
-    status: ClassifiedStatus.LIVE,
-    ...(searchParams?.q && {
-      OR: [
-        {
-          title: {
-            contains: searchParams.q as string,
-            mode: 'insensitive',
-          },
-        },
-
-        {
-          description: {
-            contains: searchParams.q as string,
-            mode: 'insensitive',
-          },
-        },
-      ],
-    }),
-    ...mapParamsToFields,
-  }
-}
 
 const getInventory = async (searchParams: AwaitedPageProps['searchParams']) => {
   const validPage = PageSchema.parse(searchParams?.page)

@@ -10,11 +10,9 @@ const validateIdSchema = z.object({
   id: z.string().uuid(),
 })
 export const POST = async (request: NextRequest) => {
-  console.log('ROUTE HIT')
   const body = await request.json()
 
   const { data, error } = validateIdSchema.safeParse(body)
-  console.log({ data, error })
   if (!data) {
     return NextResponse.json({ error: error?.message }, { status: 400 })
   }

@@ -21,7 +21,6 @@ const FavouriteButton = ({ isFavourite, setIsFavourite, id }: Props) => {
         id,
       },
     })
-    console.log('IDS', ids)
     if (ids.includes(id)) {
       setIsFavourite(true)
     } else {

@@ -10,14 +10,18 @@ import { cn } from '@/lib/utils'
 import SearchInput from '../shared/search-input'
 import TaxonomyFilters from '@/app/(presentation)/inventory/taxonomy-filters'
 import RangeFilters from './range-filters'
+import type { Prisma } from '@prisma/client'
 interface Props extends AwaitedPageProps {
-  minMaxValues: any
+  minMaxValues: Prisma.GetClassifiedAggregateType<{
+    _min: { year: true }
+    _max: { year: true; odoReading: true; price: true }
+  }>
 }
 
 const Sidebar = ({ minMaxValues, searchParams }: Props) => {
   const router = useRouter()
   const [filterCount, setFilterCount] = useState(0)
-
+  const { _min: min, _max: max } = minMaxValues
   const [queryStates, setQueryStates] = useQueryStates(
     {
       make: parseAsString.withDefault(''),
@@ -110,7 +114,15 @@ const Sidebar = ({ minMaxValues, searchParams }: Props) => {
           handleChange={handleChange}
         />
 
-        <RangeFilters />
+        <RangeFilters
+          label="Year"
+          minName="minYear"
+          maxName="maxYear"
+          defaultMin={min.year || 1925}
+          defaultMax={max.year || new Date().getFullYear()}
+          handleChange={handleChange}
+          searchParams={searchParams}
+        />
       </div>
     </div>
   )

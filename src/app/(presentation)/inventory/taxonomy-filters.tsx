@@ -17,7 +17,6 @@ const TaxonomyFilters = ({
 
   useEffect(() => {
     ;(async function fetchMakesOptions() {
-      console.log('This ran')
       const params = new URLSearchParams()
       for (const [key, value] of Object.entries(
         searchParams as Record<string, string>

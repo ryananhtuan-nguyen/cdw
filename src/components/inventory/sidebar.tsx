@@ -13,7 +13,7 @@ import RangeFilters from './range-filters'
 import type { Prisma } from '@prisma/client'
 interface Props extends AwaitedPageProps {
   minMaxValues: Prisma.GetClassifiedAggregateType<{
-    _min: { year: true }
+    _min: { year: true; odoReading: true; price: true }
     _max: { year: true; odoReading: true; price: true }
   }>
 }
@@ -122,6 +122,31 @@ const Sidebar = ({ minMaxValues, searchParams }: Props) => {
           defaultMax={max.year || new Date().getFullYear()}
           handleChange={handleChange}
           searchParams={searchParams}
+        />
+        <RangeFilters
+          label="Price"
+          minName="minPrice"
+          maxName="maxPrice"
+          defaultMin={min.price || 0}
+          defaultMax={max.price || 21474836}
+          handleChange={handleChange}
+          searchParams={searchParams}
+          increment={1000000}
+          thousandSeparator
+          currency={{
+            currencyCode: 'GBP',
+          }}
+        />
+        <RangeFilters
+          label="Odometer reading"
+          minName="minReading"
+          maxName="maxReading"
+          defaultMin={min.odoReading || 0}
+          defaultMax={max.odoReading || 1000000}
+          handleChange={handleChange}
+          searchParams={searchParams}
+          increment={5000}
+          thousandSeparator
         />
       </div>
     </div>

@@ -74,6 +74,8 @@ export default async function InventoryPage(props: PageProps) {
     },
     _min: {
       year: true,
+      price: true,
+      odoReading: true,
     },
     _max: {
       price: true,
@@ -81,7 +83,6 @@ export default async function InventoryPage(props: PageProps) {
       odoReading: true,
     },
   })
-
   const totalPages = Math.ceil(count / CARS_PER_PAGE)
 
   return (

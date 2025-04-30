@@ -9,7 +9,7 @@ import {
   type Favourites,
 } from '@/config/type'
 import { HTMLParser } from '../shared/html-parser'
-import { getKeyClassifiedInfo } from '@/lib/utils'
+import { formatPrice, getKeyClassifiedInfo } from '@/lib/utils'
 import { Button } from '../ui/button'
 import FavouriteButton from './favourite-button'
 import { usePathname } from 'next/navigation'
@@ -58,7 +58,7 @@ const ClassifiedCard = ({ car, favourites }: Props) => {
 
             <div className="absolute top-2.5 right-3.5 bg-primary text-slate-50 font-bold px-2 py-1 rounded">
               <p className="text-xs lg:text-base xl:text-lg font-semibold">
-                {car.price}
+                {formatPrice({ price: car.price, currency: car.currency })}
               </p>
             </div>
           </div>

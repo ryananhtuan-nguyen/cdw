@@ -8,6 +8,7 @@ import {
   FuelType,
   type Prisma,
   ClassifiedStatus,
+  type Currency,
 } from '@prisma/client'
 import { CarFilterSchema } from '@/app/(presentation)/inventory/page'
 
@@ -15,7 +16,7 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-const formatNumber = (
+export const formatNumber = (
   num: number | null,
   options?: Intl.NumberFormatOptions
 ) => {
@@ -147,4 +148,24 @@ export const buildCarFilterQuery = (
     }),
     ...mapParamsToFields,
   }
+}
+
+interface FormatPriceArgs {
+  price: number | null
+  currency: Currency | null
+}
+export function formatPrice({ price, currency }: FormatPriceArgs) {
+  if (!price) return '0'
+  const formatter = new Intl.NumberFormat('en-GB', {
+    style: 'currency',
+    currencyDisplay: 'narrowSymbol',
+    currency: currency || 'GBP',
+    maximumFractionDigits: 0,
+  })
+
+  if (currency === 'USD') {
+    return formatter.format(price / 100).replace('US$', '$')
+  }
+
+  return formatter.format(price / 100)
 }

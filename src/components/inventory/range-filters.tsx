@@ -2,6 +2,7 @@ import type { FilterOptions, TaxonomyFilterProps } from '@/config/type'
 import React, { useEffect, useState } from 'react'
 import type { Currency } from '@prisma/client'
 import RangeSelect from '../ui/range-select'
+import { formatNumber, formatPrice } from '@/lib/utils'
 
 interface RangeFiltersProps extends TaxonomyFilterProps {
   label: string
@@ -10,7 +11,7 @@ interface RangeFiltersProps extends TaxonomyFilterProps {
   defaultMin: number
   defaultMax: number
   increment?: number
-  thousandSeparator?: string
+  thousandSeparator?: boolean
   currency?: {
     currencyCode: Currency
   }
@@ -30,7 +31,7 @@ const RangeFilters = ({
 }: RangeFiltersProps) => {
   const getInitialState = () => {
     const state: FilterOptions<string, number> = []
-    let iterator = defaultMin - 1
+    let iterator = defaultMin - (increment ?? 1)
     do {
       if (increment) {
         iterator = iterator + increment
@@ -38,10 +39,22 @@ const RangeFilters = ({
         iterator++
       }
 
-      state.push({
-        label: iterator.toString(),
-        value: iterator,
-      })
+      if (currency) {
+        state.push({
+          label: formatPrice({
+            price: iterator,
+            currency: currency?.currencyCode,
+          }),
+          value: iterator,
+        })
+      } else if (thousandSeparator) {
+        state.push({ label: formatNumber(iterator), value: iterator })
+      } else {
+        state.push({
+          label: iterator.toString(),
+          value: iterator,
+        })
+      }
     } while (iterator < defaultMax)
 
     return state

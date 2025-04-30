@@ -14,6 +14,7 @@ import { redis } from '@/lib/redis-store'
 import { getSourceId } from '@/lib/source-id'
 import { ClassifiedStatus, type Prisma } from '@prisma/client'
 import { buildCarFilterQuery } from '@/lib/utils'
+import DialogFilters from '@/components/inventory/dialog-filters'
 
 export const PageSchema = z
   .string()
@@ -96,25 +97,41 @@ export default async function InventoryPage(props: PageProps) {
               We have found {count} cars
             </h2>
 
-            {/* <DialogFilters /> */}
+            <DialogFilters
+              minMaxValues={minMaxResult}
+              searchParams={searchParams}
+              count={count}
+            />
           </div>
 
           <CustomPagination
             baseURL={routes.inventory}
             totalPages={totalPages}
             styles={{
-              paginationRoot: 'hidden xl:flex justify-end',
+              paginationRoot: 'hidden lg:block justify-end',
               paginationPrevious: '',
               paginationNext: '',
               paginationLink: 'border-non active:border text-black',
               paginationLinkActive: '',
             }}
           />
-          <ClassifiedList
-            cars={cars}
-            favourites={favourites ? favourites.ids : []}
-          />
         </div>
+        <ClassifiedList
+          cars={cars}
+          favourites={favourites ? favourites.ids : []}
+        />
+
+        <CustomPagination
+          baseURL={routes.inventory}
+          totalPages={totalPages}
+          styles={{
+            paginationRoot: 'lg:hidden pt-12 justify-center',
+            paginationPrevious: '',
+            paginationNext: '',
+            paginationLink: 'border-non active:border ',
+            paginationLinkActive: '',
+          }}
+        />
       </div>
     </div>
   )

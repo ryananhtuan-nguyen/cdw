@@ -1,11 +1,6 @@
-'use client'
-
-import React, { useEffect, useState } from 'react'
-import { useRouter } from 'next/navigation'
-import { parseAsString, useQueryState, useQueryStates } from 'nuqs'
-import type { AwaitedPageProps, SidebarProps } from '@/config/type'
-import { routes } from '@/config/routes'
-import { env } from '@/env'
+import React from 'react'
+import SearchInput from '../shared/search-input'
+import TaxonomyFilters from '@/app/(presentation)/inventory/taxonomy-filters'
 import {
   cn,
   formatBodyType,
@@ -15,9 +10,9 @@ import {
   formatTransmission,
   formatUlezCompliance,
 } from '@/lib/utils'
-import SearchInput from '../shared/search-input'
-import TaxonomyFilters from '@/app/(presentation)/inventory/taxonomy-filters'
+import type { AwaitedPageProps } from '@/config/type'
 import RangeFilters from './range-filters'
+import { Select } from '../ui/select'
 import {
   BodyType,
   Colour,
@@ -26,85 +21,48 @@ import {
   OdoUnit,
   Transmission,
   ULEZCompliance,
-  type Prisma,
 } from '@prisma/client'
-import { Select } from '../ui/select'
-import SidebarContent from './sidebar-content'
 
-const Sidebar = ({ minMaxValues, searchParams }: SidebarProps) => {
-  const router = useRouter()
-  const [filterCount, setFilterCount] = useState(0)
-  const { _min: min, _max: max } = minMaxValues
-  const [queryStates, setQueryStates] = useQueryStates(
-    {
-      make: parseAsString.withDefault(''),
-      model: parseAsString.withDefault(''),
-      modelVariant: parseAsString.withDefault(''),
-      minYear: parseAsString.withDefault(''),
-      maxYear: parseAsString.withDefault(''),
-      minPrice: parseAsString.withDefault(''),
-      maxPrice: parseAsString.withDefault(''),
-      minReading: parseAsString.withDefault(''),
-      maxReading: parseAsString.withDefault(''),
-      currency: parseAsString.withDefault(''),
-      odoUnit: parseAsString.withDefault(''),
-      transmission: parseAsString.withDefault(''),
-      fuelType: parseAsString.withDefault(''),
-      bodyType: parseAsString.withDefault(''),
-      colour: parseAsString.withDefault(''),
-      doors: parseAsString.withDefault(''),
-      seats: parseAsString.withDefault(''),
-      ulezCompliance: parseAsString.withDefault(''),
-    },
-    {
-      shallow: false,
+type Props = {
+  clearFilters: () => void
+  filterCount: number
+  handleChange: (e: React.ChangeEvent<HTMLSelectElement>) => void
+  searchParams: AwaitedPageProps['searchParams']
+  queryStates: any
+  minMaxValues: {
+    min: {
+      year: number | null
+      odoReading: number | null
+      price: number | null
     }
-  )
-
-  useEffect(() => {
-    const filterCount = Object.entries(
-      searchParams as Record<string, string>
-    ).filter(([key, value]) => key !== 'page' && value).length
-
-    setFilterCount(filterCount)
-  }, [searchParams])
-
-  const clearFilters = () => {
-    const url = new URL(routes.inventory, env.NEXT_PUBLIC_URL)
-    window.location.replace(url.toString())
-    setFilterCount(0)
-  }
-
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) => {
-    const { name, value } = e.target
-
-    setQueryStates({
-      [name]: value || null,
-    })
-
-    if (name === 'make') {
-      setQueryStates({
-        model: null,
-        modelVariant: null,
-      })
+    max: {
+      year: number | null
+      odoReading: number | null
+      price: number | null
     }
-
-    router.refresh()
   }
+}
 
+const SidebarContent = ({
+  clearFilters,
+  filterCount,
+  handleChange,
+  searchParams,
+  queryStates,
+  minMaxValues,
+}: Props) => {
+  const { min, max } = minMaxValues
   return (
-    <div className="py-4 w-[21.25rem] bg-white border-r border-muted lg:block hidden">
-      {/* <div>
-        <div className="text-lg font-semibold flex justify-between px-4">
+    <>
+      <div>
+        <div className="text-lg font-semibold flex justify-between lg:px-4">
           <span>Filters</span>
           <button
             type="button"
             onClick={clearFilters}
             aria-disabled={!filterCount}
             className={cn(
-              'text-sm text-gray-500 py-1',
+              'text-sm text-gray-500 py-1 hidden lg:block',
               !filterCount
                 ? 'disabled opacity-50 pointer-events-none cursor-default'
                 : 'hover:underline cursor-pointer'
@@ -115,13 +73,13 @@ const Sidebar = ({ minMaxValues, searchParams }: SidebarProps) => {
         </div>
         <div className="mt-2" />
       </div>
-      <div className="p-4">
+      <div className="lg:p-4">
         <SearchInput
           placeholder="Search cars..."
           className="w-full px-3 py-2 border rounded-md focus:outline-hidden focus:ring-2 focus:ring-blue-500"
         />
       </div>
-      <div className="p-4 space-y-2">
+      <div className="lg:p-4 space-y-2">
         <TaxonomyFilters
           searchParams={searchParams}
           handleChange={handleChange}
@@ -250,17 +208,9 @@ const Sidebar = ({ minMaxValues, searchParams }: SidebarProps) => {
             value: (idx + 1).toString(),
           }))}
         />
-      </div> */}
-      <SidebarContent
-        minMaxValues={{ min, max }}
-        clearFilters={clearFilters}
-        searchParams={searchParams}
-        handleChange={handleChange}
-        queryStates={queryStates}
-        filterCount={filterCount}
-      />
-    </div>
+      </div>
+    </>
   )
 }
 
-export default Sidebar
+export default SidebarContent

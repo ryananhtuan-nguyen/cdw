@@ -35,3 +35,10 @@ export type FilterOptions<LType, VType> = Array<{
   label: LType
   value: VType
 }>
+
+export interface SidebarProps extends AwaitedPageProps {
+  minMaxValues: Prisma.GetClassifiedAggregateType<{
+    _min: { year: true; odoReading: true; price: true }
+    _max: { year: true; odoReading: true; price: true }
+  }>
+}

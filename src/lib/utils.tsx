@@ -9,6 +9,8 @@ import {
   type Prisma,
   ClassifiedStatus,
   type Currency,
+  ULEZCompliance,
+  BodyType,
 } from '@prisma/client'
 import { CarFilterSchema } from '@/app/(presentation)/inventory/page'
 
@@ -25,15 +27,15 @@ export const formatNumber = (
   return new Intl.NumberFormat('en-GB', options).format(num)
 }
 
-const formatOdometer = (unit: OdoUnit) => {
+export const formatOdometerUnit = (unit: OdoUnit) => {
   return unit === OdoUnit.MILES ? 'mi' : 'km'
 }
 
-const formatTransmission = (transmission: Transmission) => {
+export const formatTransmission = (transmission: Transmission) => {
   return transmission === Transmission.AUTOMATIC ? 'Automatic' : 'Manual'
 }
 
-const formatFuelType = (fuelType: FuelType) => {
+export const formatFuelType = (fuelType: FuelType) => {
   switch (fuelType) {
     case FuelType.PETROL:
       return 'Petrol'
@@ -48,7 +50,7 @@ const formatFuelType = (fuelType: FuelType) => {
   }
 }
 
-const formatColour = (colour: string) => {
+export const formatColour = (colour: string) => {
   if (!colour || typeof colour !== 'string') return ''
   return colour[0] + colour.slice(1, colour.length).toLowerCase()
 }
@@ -58,7 +60,9 @@ export const getKeyClassifiedInfo = (car: CarWithImages) => {
     {
       id: 'odoReading',
       icon: <GaugeCircle className="w-4 h-4" />,
-      value: `${formatNumber(car.odoReading)} ${formatOdometer(car.odoUnit)}`,
+      value: `${formatNumber(car.odoReading)} ${formatOdometerUnit(
+        car.odoUnit
+      )}`,
     },
     {
       id: 'transmission',
@@ -98,22 +102,26 @@ export const buildCarFilterQuery = (
     maxReading: 'odoReading',
   }
 
-  //   const numFilters = ['seats', 'doors']
-  //   const enumFilters = [
-  //     'odoUnit',
-  //     'currency',
-  //     'transmission',
-  //     'bodyType',
-  //     'fuelType',
-  //     'colour',
-  //     'ulezCompliance',
-  //   ]
+  const numFilters = ['seats', 'doors']
+  const enumFilters = [
+    'odoUnit',
+    'currency',
+    'transmission',
+    'bodyType',
+    'fuelType',
+    'colour',
+    'ulezCompliance',
+  ]
 
   const mapParamsToFields = keys.reduce((acc, key) => {
     const value = searchParams?.[key] as string | undefined
     if (!value) return acc
     if (taxonomyFilters.includes(key)) {
       acc[key] = { id: value }
+    } else if (enumFilters.includes(key)) {
+      acc[key] = value.toUpperCase()
+    } else if (numFilters.includes(key)) {
+      acc[key] = Number(value)
     } else if (key in rangeFilters) {
       const field = rangeFilters[key as keyof typeof rangeFilters]
       acc[field] = acc[field] || {}
@@ -168,4 +176,26 @@ export function formatPrice({ price, currency }: FormatPriceArgs) {
   }
 
   return formatter.format(price / 100)
+}
+
+export const formatUlezCompliance = (ulezCompliance: ULEZCompliance) => {
+  return ulezCompliance === ULEZCompliance.EXEMPT ? 'Exempt' : 'Non-Exempt'
+}
+export const formatBodyType = (bodyType: BodyType) => {
+  switch (bodyType) {
+    case BodyType.SEDAN:
+      return 'Sedan'
+    case BodyType.HATCHBACK:
+      return 'Hatchback'
+    case BodyType.SUV:
+      return 'SUV'
+    case BodyType.COUPE:
+      return 'Coupe'
+    case BodyType.CONVERTIBLE:
+      return 'Convertible'
+    case BodyType.WAGON:
+      return 'Wagon'
+    default:
+      return 'Unknown'
+  }
 }

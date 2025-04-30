@@ -6,11 +6,29 @@ import { parseAsString, useQueryState, useQueryStates } from 'nuqs'
 import type { AwaitedPageProps } from '@/config/type'
 import { routes } from '@/config/routes'
 import { env } from '@/env'
-import { cn } from '@/lib/utils'
+import {
+  cn,
+  formatBodyType,
+  formatColour,
+  formatFuelType,
+  formatOdometerUnit,
+  formatTransmission,
+  formatUlezCompliance,
+} from '@/lib/utils'
 import SearchInput from '../shared/search-input'
 import TaxonomyFilters from '@/app/(presentation)/inventory/taxonomy-filters'
 import RangeFilters from './range-filters'
-import type { Prisma } from '@prisma/client'
+import {
+  BodyType,
+  Colour,
+  Currency,
+  FuelType,
+  OdoUnit,
+  Transmission,
+  ULEZCompliance,
+  type Prisma,
+} from '@prisma/client'
+import { Select } from '../ui/select'
 interface Props extends AwaitedPageProps {
   minMaxValues: Prisma.GetClassifiedAggregateType<{
     _min: { year: true; odoReading: true; price: true }
@@ -113,7 +131,6 @@ const Sidebar = ({ minMaxValues, searchParams }: Props) => {
           searchParams={searchParams}
           handleChange={handleChange}
         />
-
         <RangeFilters
           label="Year"
           minName="minYear"
@@ -147,6 +164,96 @@ const Sidebar = ({ minMaxValues, searchParams }: Props) => {
           searchParams={searchParams}
           increment={5000}
           thousandSeparator
+        />
+        <Select
+          label="Currency"
+          name="currency"
+          value={queryStates.currency || ''}
+          onChange={handleChange}
+          options={Object.values(Currency).map((value) => ({
+            label: value,
+            value,
+          }))}
+        />
+        <Select
+          label="Odometer unit"
+          name="odoUnit"
+          value={queryStates.odoUnit || ''}
+          onChange={handleChange}
+          options={Object.values(OdoUnit).map((value) => ({
+            label: formatOdometerUnit(value),
+            value,
+          }))}
+        />
+        <Select
+          label="Transmission"
+          name="transmission"
+          value={queryStates.transmission || ''}
+          onChange={handleChange}
+          options={Object.values(Transmission).map((value) => ({
+            label: formatTransmission(value),
+            value,
+          }))}
+        />
+        <Select
+          label="Fuel Type"
+          name="fuelType"
+          value={queryStates.fuelType || ''}
+          onChange={handleChange}
+          options={Object.values(FuelType).map((value) => ({
+            label: formatFuelType(value),
+            value,
+          }))}
+        />
+        <Select
+          label="Body Type"
+          name="bodyType"
+          value={queryStates.bodyType || ''}
+          onChange={handleChange}
+          options={Object.values(BodyType).map((value) => ({
+            label: formatBodyType(value),
+            value,
+          }))}
+        />
+        <Select
+          label="Colour"
+          name="colour"
+          value={queryStates.colour || ''}
+          onChange={handleChange}
+          options={Object.values(Colour).map((value) => ({
+            label: formatColour(value),
+            value,
+          }))}
+        />
+        <Select
+          label="ULEZ Compliance"
+          name="ulezCompliance"
+          value={queryStates.ulezCompliance || ''}
+          onChange={handleChange}
+          options={Object.values(ULEZCompliance).map((value) => ({
+            label: formatUlezCompliance(value),
+            value,
+          }))}
+        />
+        <Select
+          label="Doors"
+          name="doors"
+          value={queryStates.doors || ''}
+          onChange={handleChange}
+          options={Array.from({ length: 6 }).map((_, idx) => ({
+            label: (idx + 1).toString(),
+            value: (idx + 1).toString(),
+          }))}
+        />
+        <Select
+          label="Seats"
+          name="seats"
+          value={queryStates.seats || ''}
+          onChange={handleChange}
+          options={Array.from({ length: 8 }).map((_, idx) => ({
+            label: (idx + 1).toString(),
+            value: (idx + 1).toString(),
+          }))}
         />
       </div>
     </div>

@@ -1,0 +1,13 @@
+<svg width="600" height="200" viewBox="0 0 600 200" xmlns="http://www.w3.org/2000/svg">
+  <!-- Car body -->
+  <path d="M100 100 C150 60, 450 60, 500 100 L480 100 C470 80, 430 80, 420 100 L180 100 C170 80, 130 80, 120 100 L100 100 Z"
+        fill="#333" />
+  <!-- Car top -->
+  <path d="M180 60 C200 30, 400 30, 420 60 Q300 80, 180 60 Z" fill="#aaa" />
+  <!-- Left wheel -->
+  <circle cx="150" cy="130" r="20" fill="#333" />
+  <circle cx="150" cy="130" r="10" fill="#ccc" />
+  <!-- Right wheel -->
+  <circle cx="450" cy="130" r="20" fill="#333" />
+  <circle cx="450" cy="130" r="10" fill="#ccc" />
+</svg>

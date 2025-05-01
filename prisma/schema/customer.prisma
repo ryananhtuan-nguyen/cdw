@@ -7,8 +7,8 @@ model Customer {
     bookingDate   DateTime?           @map("booking_date")
     termsAccepted Boolean             @default(false) @map("terms_accepted")
     status        CustomerStatus      @default(INTERESTED)
-    classifiedId  String              @map("classified_id")
-    classified    Classified          @relation(fields: [classifiedId], references: [id], onDelete: Cascade)
+    classifiedId  String?             @map("classified_id")
+    classified    Classified?         @relation(fields: [classifiedId], references: [id], onDelete: Cascade)
     createdAt     DateTime            @default(now()) @map("created_at")
     updatedAt     DateTime            @updatedAt @map("updated_at")
     lifecycle     CustomerLifeCycle[]
